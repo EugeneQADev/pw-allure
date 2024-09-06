@@ -37,6 +37,9 @@ jobs:
           
           # Generate the Allure report
           npx allure generate ./allure-results --clean
+          
+          # Show the allure-report folder content to check if report is generated
+          ls -la allure-report
 
       # Step 6: Upload Playwright Test Artifacts (Allure Results)
       - uses: actions/upload-artifact@v4
@@ -63,8 +66,13 @@ jobs:
           # Clone the gh-pages branch (or create it if it doesn't exist)
           git clone --branch gh-pages https://github.com/EugeneQADev/pw-allure.git gh-pages || git clone https://github.com/EugeneQADev/pw-allure.git gh-pages
 
-          # Copy Allure report to the gh-pages branch
-          cp -r allure-report/* gh-pages/
+          # Check if the allure-report directory exists before copying
+          if [ -d "allure-report" ]; then
+            echo "Allure report directory exists, copying files..."
+            cp -r allure-report/* gh-pages/
+          else
+            echo "Allure report directory does not exist!"
+          fi
 
           # Commit and push changes to the gh-pages branch
           cd gh-pages
