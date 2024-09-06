@@ -35,16 +35,8 @@ jobs:
           # Run the tests with Allure reporter
           npx playwright test --reporter=list,allure-playwright
 
-          # Check the allure-results directory for test results
-          echo "Checking allure-results directory..."
-          ls -la allure-results
-          
           # Generate the Allure report
           npx allure generate ./allure-results --clean || echo "Allure report generation failed"
-
-          # Check the allure-report directory for generated report
-          echo "Checking allure-report directory..."
-          ls -la allure-report
 
       # Step 6: Upload Playwright Test Artifacts (Allure Results)
       - uses: actions/upload-artifact@v4
@@ -65,7 +57,6 @@ jobs:
         run: |
           git config --global user.email "avocodejames2@gmail.com"
           git config --global user.name "Evhenii"
-          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Clone the gh-pages branch (or create it if it doesn't exist)
         run: |
