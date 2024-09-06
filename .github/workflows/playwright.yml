@@ -55,8 +55,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "eugene.vagin@deviqa.com"
-          git config --global user.name "Evhenii"
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
       - name: Clone the gh-pages branch (or create it if it doesn't exist)
         run: |
