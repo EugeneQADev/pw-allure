@@ -34,15 +34,15 @@ jobs:
           
           # Run the tests with Allure reporter
           npx playwright test --reporter=list,allure-playwright
-          
-          # Show allure-results content to check if results are generated
+
+          # Check the allure-results directory for test results
           echo "Checking allure-results directory..."
           ls -la allure-results
           
           # Generate the Allure report
           npx allure generate ./allure-results --clean || echo "Allure report generation failed"
 
-          # Show allure-report content to check if report is generated
+          # Check the allure-report directory for generated report
           echo "Checking allure-report directory..."
           ls -la allure-report
 
@@ -62,16 +62,18 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
-      - name: Deploy Allure Report to GitHub Pages
+      - name: Configure Git
         run: |
-          # Configure Git
           git config --global user.email "avocodejames2@gmail.com"
           git config --global user.name "Evhenii"
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
 
-          # Clone the gh-pages branch (or create it if it doesn't exist)
+      - name: Clone the gh-pages branch (or create it if it doesn't exist)
+        run: |
           git clone --branch gh-pages https://github.com/EugeneQADev/pw-allure.git gh-pages || git clone https://github.com/EugeneQADev/pw-allure.git gh-pages
 
-          # Check if the allure-report directory exists before copying
+      - name: Copy Allure Report to gh-pages
+        run: |
           if [ -d "allure-report" ]; then
             echo "Allure report directory exists, copying files..."
             cp -r allure-report/* gh-pages/
@@ -79,8 +81,9 @@ jobs:
             echo "Allure report directory does not exist!"
           fi
 
-          # Commit and push changes to the gh-pages branch
+      - name: Commit and Push changes to gh-pages
+        run: |
           cd gh-pages
           git add .
-          git commit -m "Update Allure report"
+          git commit -m "Update Allure report" || echo "No changes to commit"
           git push origin gh-pages
