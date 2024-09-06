@@ -32,13 +32,18 @@ jobs:
           # Install allure-playwright if not installed
           npm install -D allure-playwright
           
-          # Run the tests
+          # Run the tests with Allure reporter
           npx playwright test --reporter=list,allure-playwright
           
-          # Generate the Allure report
-          npx allure generate ./allure-results --clean
+          # Show allure-results content to check if results are generated
+          echo "Checking allure-results directory..."
+          ls -la allure-results
           
-          # Show the allure-report folder content to check if report is generated
+          # Generate the Allure report
+          npx allure generate ./allure-results --clean || echo "Allure report generation failed"
+
+          # Show allure-report content to check if report is generated
+          echo "Checking allure-report directory..."
           ls -la allure-report
 
       # Step 6: Upload Playwright Test Artifacts (Allure Results)
