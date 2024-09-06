@@ -53,6 +53,11 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
+      - name: Set Git identity
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
+
       - name: Clone the gh-pages branch (or create it if it doesn't exist)
         run: |
           git clone --branch gh-pages https://github.com/EugeneQADev/pw-allure.git gh-pages || git clone https://github.com/EugeneQADev/pw-allure.git gh-pages
